@@ -1,0 +1,79 @@
+name: CI
+
+
+
+on:
+    push:
+      branches: ["main"]
+      
+    pull_request:
+         branches: ["main"]
+         
+
+
+jobs:
+
+    build-web:
+        runs-on: ubuntu-latest
+
+         
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
+              
+            
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                node-version: '20'  
+            
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2
+              # or  use npm install -g pm2
+              
+            - name: Install dependencies
+              run:  pnpm install
+              
+            - name: Build Client 
+              run:  pnpm run build:web
+
+            - name: Lint Client
+              run: pnpm run lint:web
+ 
+              
+
+
+
+
+    # build-server:
+    #     runs-on: ubuntu-latest
+
+
+    #     steps:
+
+    #         - name: Build Server  
+    #           run:  pnpm run build:server
+
+    #         - name: Lint Server
+    #           run: pnpm run lint:server
+              
+              
+
+  
+    test-client:
+        runs-on: ubuntu-latest
+
+
+        steps:
+
+            - name: Testing Web
+              run:  pnpm run test:web
+
+
+    # test-server:
+    #     runs-on: ubuntu-latest
+        
+        
+    #     steps:
+    #         - name: Testing Server
+    #           run: pnpm run test:server
